@@ -1,0 +1,58 @@
+/* ==========================================================================
+   layout.css — page shell (sidebar + main) and grid helpers.
+   ========================================================================== */
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* ---- Sidebar ---- */
+.sb {
+  background: var(--sb);
+  color: #fff;
+  padding: 18px 14px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.logo { display: block; margin: 0 auto 14px; width: 150px; max-width: 70%; height: auto; }
+
+.nav { display: flex; flex-direction: column; gap: 2px; }
+.nav a {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px; border-radius: 12px;
+  color: #fff; text-decoration: none;
+  font-size: 14.5px; font-weight: 600; cursor: pointer;
+}
+.nav a:hover { background: #1c1c1c; }
+.nav a.on { background: #3a3a3a; }
+.nav-icon { width: 20px; text-align: center; font-size: 16px; opacity: .9; }
+
+.who { margin-top: auto; padding-top: 14px; border-top: 1px solid #2a2a2a; font-size: 12px; color: #bbb; }
+.who b { display: block; color: #fff; font-size: 13px; }
+
+/* ---- Main ---- */
+main { padding: 34px 32px 50px; min-width: 0; }
+.view { min-width: 0; }
+
+/* ---- Grids ----
+   IMPORTANT: every track uses minmax(0, 1fr) and every child has min-width: 0.
+   A plain `1fr` track can never shrink below its content, so a wide table made
+   the whole page wider than the phone screen (the "zoomed-out" bug). */
+.grid { display: grid; gap: var(--gap); margin-bottom: var(--gap); }
+.grid > * { min-width: 0; }
+.g2 { grid-template-columns: minmax(300px, 340px) minmax(0, 1fr); align-items: start; }
+.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* Toolbar row above tables */
+.tools { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; align-items: center; }
+.tools h2 { margin: 0; }
+.tools input, .tools select { width: auto; flex: 1 1 150px; }
+.tools .grow { flex: 3 1 220px; }
+.tools .sp { flex: 100 1 0; }
+.tools .title { flex: 1 1 auto; }

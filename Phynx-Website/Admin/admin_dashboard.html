@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PHYNX ERP – Admin</title>
+  <link rel="stylesheet" href="admin_dashboard.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="brand">
+      <img class="logo" src="../logo/pynx-logo.png" alt="Pynx">
+      <div class="brand-tag">ADMIN</div>
+    </div>
+    <div>
+      <div class="nav-label">ADMINISTRATION</div>
+      <nav class="nav">
+        <a href="#dashboard"><span class="nav-icon">▦</span>Dashboard</a>
+        <a href="#requisitions"><span class="nav-icon">☰</span>Requisition Management</a>
+        <a href="#inventory"><span class="nav-icon">▤</span>Inventory Monitoring</a>
+        <a href="#purchasing"><span class="nav-icon">◇</span>Purchasing Monitoring</a>
+        <a href="#delivery"><span class="nav-icon">▷</span>Delivery Monitoring</a>
+      </nav>
+    </div>
+    <div>
+      <div class="nav-label">MANAGEMENT</div>
+      <nav class="nav">
+        <a href="#users"><span class="nav-icon">◉</span>User Management</a>
+        <a href="#finance"><span class="nav-icon">₱</span>Finance Monitoring</a>
+        <a href="#documents"><span class="nav-icon">▭</span>Receipts and Documents</a>
+        <a href="#reports"><span class="nav-icon">≡</span>Reports</a>
+      </nav>
+    </div>
+    <div class="sidebar-note">
+      Signed in as Admin<br>
+      <a href="finance.html">Switch to Finance (demo)</a><br>
+      <a href="#dashboard">Log out</a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="crumb">PHYNX ERP / ADMIN</div>
+      <div class="staff"><span>Admin User</span><div class="avatar">A</div></div>
+    </div>
+
+    <!-- ================= DASHBOARD ================= -->
+    <section class="page" id="dashboard">
+      <div class="heading">
+        <div>
+          <div class="eyebrow">ADMIN OVERVIEW</div>
+          <h1>Dashboard</h1>
+          <p class="subtitle">A quick view of requisitions, stock, purchasing and deliveries across the business.</p>
+        </div>
+        <a class="button button-dark" href="#requisitions">Review approvals</a>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><div class="metric-top"><span>Total Requisitions</span><span class="metric-icon">☰</span></div><div class="metric-value">128</div><div class="metric-foot">24 submitted this month</div></div>
+        <div class="metric"><div class="metric-top"><span>Pending Approvals</span><span class="metric-icon">◔</span></div><div class="metric-value">9</div><div class="metric-foot">Waiting for Admin decision</div></div>
+        <div class="metric"><div class="metric-top"><span>Active Purchase Orders</span><span class="metric-icon">◇</span></div><div class="metric-value">14</div><div class="metric-foot">3 awaiting supplier confirmation</div></div>
+        <div class="metric"><div class="metric-top"><span>Incoming Deliveries</span><span class="metric-icon">▷</span></div><div class="metric-value">6</div><div class="metric-foot">1 delayed</div></div>
+      </div>
+
+      <div class="content-grid">
+        <div class="stack">
+          <div class="panel">
+            <div class="panel-head"><div><h2>Requisitions awaiting Admin approval</h2><div class="panel-sub">Approve or reject after reviewing the details</div></div><a class="text-link" href="#requisitions">View all</a></div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>REFERENCE</th><th>DEPARTMENT</th><th>ITEMS</th><th>SUBMITTED</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td class="primary-cell">REQ-2026-0128</td><td>Marketing / Creative</td><td>Swimwear fabric, 120 m</td><td>Nov 9, 2026</td><td><span class="status pending">Pending Approval</span></td></tr>
+                <tr><td class="primary-cell">REQ-2026-0127</td><td>Logistics</td><td>Packaging boxes, 300 pcs</td><td>Nov 8, 2026</td><td><span class="status pending">Pending Approval</span></td></tr>
+                <tr><td class="primary-cell">REQ-2026-0125</td><td>Inventory</td><td>Cap blanks, 500 pcs</td><td>Nov 7, 2026</td><td><span class="status pending">Pending Approval</span></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div><h2>Recent transactions</h2><div class="panel-sub">Latest activity across departments</div></div></div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>ACTIVITY</th><th>DEPARTMENT</th><th>DATE</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td><div class="primary-cell">PO-2026-041 ordered</div><div class="secondary-cell">House of Fabrics</div></td><td>Procurement</td><td>Nov 9</td><td><span class="status received">Ordered</span></td></tr>
+                <tr><td><div class="primary-cell">Stock released, REQ-2026-0119</div><div class="secondary-cell">Cotton twill, 40 m</div></td><td>Inventory</td><td>Nov 8</td><td><span class="status approved">Completed</span></td></tr>
+                <tr><td><div class="primary-cell">REQ-2026-0121 rejected</div><div class="secondary-cell">Returned to department</div></td><td>Admin</td><td>Nov 7</td><td><span class="status rejected">Rejected</span></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </div>
+
+        <div class="stack">
+          <div class="panel">
+            <div class="panel-head"><h2>Quick access</h2></div>
+            <div class="shortcuts">
+              <a href="#requisitions">Requisitions</a><a href="#inventory">Inventory</a>
+              <a href="#purchasing">Purchasing</a><a href="#delivery">Deliveries</a>
+              <a href="#users">Users</a><a href="#reports">Reports</a>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2>Inventory and purchasing</h2></div>
+            <div class="panel-body">
+              <div class="bar-row"><div class="bar-label"><span>Available stock</span><span>82%</span></div><div class="bar ok"><span style="width:82%"></span></div></div>
+              <div class="bar-row"><div class="bar-label"><span>Reserved stock</span><span>11%</span></div><div class="bar warn"><span style="width:11%"></span></div></div>
+              <div class="bar-row"><div class="bar-label"><span>Low-stock items</span><span>7 items</span></div><div class="bar danger"><span style="width:18%"></span></div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2>Delivery status</h2></div>
+            <div class="panel-body">
+              <div class="bar-row"><div class="bar-label"><span>On schedule</span><span>4</span></div><div class="bar ok"><span style="width:66%"></span></div></div>
+              <div class="bar-row"><div class="bar-label"><span>Delayed</span><span>1</span></div><div class="bar danger"><span style="width:17%"></span></div></div>
+              <div class="bar-row"><div class="bar-label"><span>Arrived this week</span><span>1</span></div><div class="bar"><span style="width:17%"></span></div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2>Notifications</h2></div>
+            <ul class="list">
+              <li><div>9 requisitions need a decision<small>Today</small></div></li>
+              <li><div>J&amp;T cap delivery from Manila is delayed<small>Yesterday</small></div></li>
+              <li><div>Cotton twill is below minimum stock<small>Nov 8</small></div></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= REQUISITION MANAGEMENT ================= -->
+    <section class="page" id="requisitions">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">ADMINISTRATION</div><h1>Requisition Management</h1>
+        <p class="subtitle">Review requests from every department. Admin approves or rejects; Inventory and Purchasing take over after approval.</p></div>
+        <div class="actions"><a class="button button-light" href="#reports">Export list</a></div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-top"><span>Pending Approval</span></div><div class="metric-value">9</div><div class="metric-foot">Needs Admin decision</div></div>
+        <div class="metric"><div class="metric-top"><span>Approved</span></div><div class="metric-value">41</div><div class="metric-foot">This month</div></div>
+        <div class="metric"><div class="metric-top"><span>Rejected</span></div><div class="metric-value">6</div><div class="metric-foot">Returned to departments</div></div>
+        <div class="metric"><div class="metric-top"><span>Forwarded to Purchasing</span></div><div class="metric-value">11</div><div class="metric-foot">Stock not available</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Requisition workflow</h2></div>
+        <div class="flow">
+          <div><b>1. Submitted</b>Department sends request</div>
+          <div class="you"><b>2. Admin review</b>Approve or reject</div>
+          <div><b>3. Rejected?</b>Returns to department</div>
+          <div><b>4. Inventory check</b>System validates stock</div>
+          <div><b>5. Not available</b>Forwarded to Purchasing</div>
+          <div><b>6. Available</b>Stock reserved, then released</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="search" placeholder="Search by reference, department or item"><select><option>All departments</option></select><select><option>All statuses</option><option>Pending Approval</option><option>Approved</option><option>Rejected</option><option>Forwarded to Purchasing</option><option>Completed</option></select></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>REFERENCE</th><th>DEPARTMENT</th><th>ITEMS AND QTY</th><th>SUBMITTED</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">REQ-2026-0128</td><td>Marketing / Creative</td><td>Swimwear fabric, 120 m</td><td>Nov 9, 2026</td><td><span class="status pending">Pending Approval</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini approve">Approve</button><button class="mini reject">Reject</button></div></td></tr>
+            <tr><td class="primary-cell">REQ-2026-0124</td><td>Inventory</td><td>Cap blanks, 500 pcs</td><td>Nov 6, 2026</td><td><span class="status received">Forwarded to Purchasing</span></td><td><div class="row-actions"><button class="mini">View</button></div></td></tr>
+            <tr><td class="primary-cell">REQ-2026-0121</td><td>Procurement</td><td>Office supplies, 1 lot</td><td>Nov 5, 2026</td><td><span class="status rejected">Rejected</span></td><td><div class="row-actions"><button class="mini">View</button></div></td></tr>
+            <tr><td class="primary-cell">REQ-2026-0119</td><td>Marketing / Creative</td><td>Cotton twill, 40 m</td><td>Nov 3, 2026</td><td><span class="status approved">Completed</span></td><td><div class="row-actions"><button class="mini">View</button></div></td></tr>
+          </tbody>
+        </table></div>
+        <div class="note">Opening a request will show full details, a rejection reason field and the approval history.</div>
+      </div>
+    </section>
+
+    <!-- ================= INVENTORY MONITORING ================= -->
+    <section class="page" id="inventory">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">ADMINISTRATION</div><h1>Inventory Monitoring</h1>
+        <p class="subtitle">View stock levels and movements. Daily stock operations stay with the Inventory department.</p></div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-top"><span>Total Items</span></div><div class="metric-value">212</div><div class="metric-foot">Across all categories</div></div>
+        <div class="metric"><div class="metric-top"><span>Available Stock</span></div><div class="metric-value">180</div><div class="metric-foot">Items ready to use</div></div>
+        <div class="metric"><div class="metric-top"><span>Reserved Stock</span></div><div class="metric-value">25</div><div class="metric-foot">Held for approved requests</div></div>
+        <div class="metric"><div class="metric-top"><span>Low Stock</span></div><div class="metric-value">7</div><div class="metric-foot">Below minimum level</div></div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="search" placeholder="Search materials"><select><option>All categories</option><option>Fabrics</option><option>Caps</option><option>Swimwear materials</option><option>Supplies</option></select><select><option>All stock levels</option><option>Available</option><option>Reserved</option><option>Low stock</option></select></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>MATERIAL</th><th>CATEGORY</th><th>AVAILABLE</th><th>RESERVED</th><th>MINIMUM</th><th>STATUS</th></tr></thead>
+          <tbody>
+            <tr><td><div class="primary-cell">Cotton twill</div><div class="secondary-cell">MAT-0012</div></td><td>Fabrics</td><td>45 m</td><td>40 m</td><td>100 m</td><td><span class="status rejected">Low stock</span></td></tr>
+            <tr><td><div class="primary-cell">Nylon-spandex swim fabric</div><div class="secondary-cell">MAT-0031</div></td><td>Swimwear materials</td><td>260 m</td><td>120 m</td><td>150 m</td><td><span class="status approved">Available</span></td></tr>
+            <tr><td><div class="primary-cell">Cap blanks, black</div><div class="secondary-cell">MAT-0044</div></td><td>Caps</td><td>320 pcs</td><td>200 pcs</td><td>250 pcs</td><td><span class="status pending">Reserved</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h2>Stock movement records</h2><div class="panel-sub">Stock-in, stock-out and adjustment history</div></div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>DATE</th><th>TYPE</th><th>MATERIAL</th><th>QTY</th><th>REFERENCE</th></tr></thead>
+          <tbody>
+            <tr><td>Nov 9</td><td><span class="status approved">Stock-in</span></td><td>Nylon-spandex swim fabric</td><td>+200 m</td><td>GRN-2026-033</td></tr>
+            <tr><td>Nov 8</td><td><span class="status pending">Stock-out</span></td><td>Cotton twill</td><td>-40 m</td><td>REQ-2026-0119</td></tr>
+            <tr><td>Nov 6</td><td><span class="status received">Adjustment</span></td><td>Cap blanks, black</td><td>-5 pcs</td><td>ADJ-2026-007</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ================= PURCHASING MONITORING ================= -->
+    <section class="page" id="purchasing">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">ADMINISTRATION</div><h1>Purchasing Monitoring</h1>
+        <p class="subtitle">Follow purchase requests from Inventory and the purchase orders sent to suppliers.</p></div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-top"><span>Purchase Requests</span></div><div class="metric-value">5</div><div class="metric-foot">Forwarded for low stock</div></div>
+        <div class="metric"><div class="metric-top"><span>Active Orders</span></div><div class="metric-value">14</div><div class="metric-foot">Not yet fully received</div></div>
+        <div class="metric"><div class="metric-top"><span>Estimated Cost</span></div><div class="metric-value">₱486k</div><div class="metric-foot">Open orders</div></div>
+        <div class="metric"><div class="metric-top"><span>Cancelled</span></div><div class="metric-value">2</div><div class="metric-foot">This quarter</div></div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="search" placeholder="Search PO number or supplier"><select><option>All suppliers</option><option>House of Fabrics</option></select><select><option>All statuses</option><option>Pending</option><option>Approved</option><option>Ordered</option><option>Partially Received</option><option>Fully Received</option><option>Cancelled</option></select></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>PO NUMBER</th><th>SUPPLIER</th><th>MATERIALS</th><th>EST. COST</th><th>EXPECTED</th><th>STATUS</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">PO-2026-041</td><td>House of Fabrics</td><td>Cotton twill, 200 m</td><td>₱64,000</td><td>Nov 16</td><td><span class="status received">Ordered</span></td></tr>
+            <tr><td class="primary-cell">PO-2026-040</td><td>Manila Cap Supply</td><td>Cap blanks, 500 pcs</td><td>₱92,500</td><td>Nov 14</td><td><span class="status inspection">Partially Received</span></td></tr>
+            <tr><td class="primary-cell">PO-2026-038</td><td>House of Fabrics</td><td>Swim fabric, 300 m</td><td>₱118,000</td><td>Nov 9</td><td><span class="status approved">Fully Received</span></td></tr>
+            <tr><td class="primary-cell">PO-2026-042</td><td>House of Fabrics</td><td>Lining fabric, 100 m</td><td>₱21,000</td><td>Nov 20</td><td><span class="status pending">Pending</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="note">Opening a PO will show supplier details, items, quantities, cost and purchasing history.</div>
+      </div>
+    </section>
+
+    <!-- ================= DELIVERY MONITORING ================= -->
+    <section class="page" id="delivery">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">ADMINISTRATION</div><h1>Delivery Monitoring</h1>
+        <p class="subtitle">Track incoming goods from suppliers and couriers, including delays and damaged or missing items.</p></div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-top"><span>Incoming</span></div><div class="metric-value">6</div><div class="metric-foot">On the way</div></div>
+        <div class="metric"><div class="metric-top"><span>Expected This Week</span></div><div class="metric-value">3</div><div class="metric-foot">Nov 10 – 16</div></div>
+        <div class="metric"><div class="metric-top"><span>Delayed</span></div><div class="metric-value">1</div><div class="metric-foot">Past expected date</div></div>
+        <div class="metric"><div class="metric-top"><span>Issue Reports</span></div><div class="metric-value">2</div><div class="metric-foot">Damaged or incomplete</div></div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="search" placeholder="Search delivery or PO number"><select><option>All couriers</option><option>J&amp;T</option><option>Supplier delivery</option></select><select><option>All statuses</option><option>Incoming</option><option>Completed</option><option>Delayed</option></select></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>DELIVERY</th><th>SUPPLIER / COURIER</th><th>PO</th><th>EXPECTED</th><th>ARRIVED</th><th>STATUS</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">DLV-2026-056</td><td>House of Fabrics</td><td>PO-2026-041</td><td>Nov 16</td><td>–</td><td><span class="status received">Incoming</span></td></tr>
+            <tr><td class="primary-cell">DLV-2026-055</td><td>Manila Cap Supply via J&amp;T</td><td>PO-2026-040</td><td>Nov 8</td><td>–</td><td><span class="status rejected">Delayed</span></td></tr>
+            <tr><td class="primary-cell">DLV-2026-053</td><td>House of Fabrics</td><td>PO-2026-038</td><td>Nov 9</td><td>Nov 9</td><td><span class="status approved">Completed</span></td></tr>
+            <tr><td class="primary-cell">DLV-2026-051</td><td>House of Fabrics</td><td>PO-2026-035</td><td>Nov 4</td><td>Nov 5</td><td><span class="status inspection">Damaged item report</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ================= USER MANAGEMENT ================= -->
+    <section class="page" id="users">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">MANAGEMENT</div><h1>User Management</h1>
+        <p class="subtitle">Manage employee accounts, departments, roles and system access.</p></div>
+        <div class="actions"><button class="button button-dark">Create employee account</button></div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-top"><span>Total Employees</span></div><div class="metric-value">34</div><div class="metric-foot">All departments</div></div>
+        <div class="metric"><div class="metric-top"><span>Active</span></div><div class="metric-value">31</div><div class="metric-foot">Can sign in</div></div>
+        <div class="metric"><div class="metric-top"><span>Deactivated</span></div><div class="metric-value">3</div><div class="metric-foot">Access removed</div></div>
+        <div class="metric"><div class="metric-top"><span>Departments</span></div><div class="metric-value">6</div><div class="metric-foot">Admin, Finance, Marketing, Procurement, Inventory, Logistics</div></div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="search" placeholder="Search name or employee ID"><select><option>All departments</option><option>Admin</option><option>Finance</option><option>Marketing / Creative and Design</option><option>Procurement</option><option>Inventory</option><option>Logistics</option></select><select><option>All statuses</option><option>Active</option><option>Deactivated</option></select></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>EMPLOYEE</th><th>DEPARTMENT</th><th>ROLE</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
+          <tbody>
+            <tr><td><div class="primary-cell">Maria Santos</div><div class="secondary-cell">EMP-0001</div></td><td>Admin</td><td>Administrator</td><td><span class="status approved">Active</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini">Edit</button></div></td></tr>
+            <tr><td><div class="primary-cell">Paolo Reyes</div><div class="secondary-cell">EMP-0007</div></td><td>Finance</td><td>Finance Officer</td><td><span class="status approved">Active</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini">Edit</button></div></td></tr>
+            <tr><td><div class="primary-cell">Ana Cruz</div><div class="secondary-cell">EMP-0015</div></td><td>Inventory</td><td>Inventory Staff</td><td><span class="status approved">Active</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini">Edit</button></div></td></tr>
+            <tr><td><div class="primary-cell">Jun Dela Cruz</div><div class="secondary-cell">EMP-0022</div></td><td>Logistics</td><td>Logistics Staff</td><td><span class="status rejected">Deactivated</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini">Activate</button></div></td></tr>
+          </tbody>
+        </table></div>
+        <div class="note">Role permissions will be shown in the user detail view. Only Admin can reach this page.</div>
+      </div>
+    </section>
+
+    <!-- ================= FINANCE MONITORING ================= -->
+    <section class="page" id="finance">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">MANAGEMENT</div><h1>Finance Monitoring</h1>
+        <p class="subtitle">Read-only view of budgets, expenses and supplier payments maintained by Finance.</p></div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-top"><span>Total Budget</span></div><div class="metric-value">₱2.4M</div><div class="metric-foot">FY 2026</div></div>
+        <div class="metric"><div class="metric-top"><span>Total Expenses</span></div><div class="metric-value">₱1.58M</div><div class="metric-foot">66% used</div></div>
+        <div class="metric"><div class="metric-top"><span>Remaining Budget</span></div><div class="metric-value">₱820k</div><div class="metric-foot">34% left</div></div>
+        <div class="metric"><div class="metric-top"><span>Outstanding Invoices</span></div><div class="metric-value">5</div><div class="metric-foot">₱214,000 unpaid</div></div>
+      </div>
+      <div class="content-grid">
+        <div class="panel">
+          <div class="panel-head"><h2>Supplier payment status</h2></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>INVOICE</th><th>SUPPLIER</th><th>AMOUNT</th><th>DUE</th><th>STATUS</th></tr></thead>
+            <tbody>
+              <tr><td class="primary-cell">INV-88231</td><td>House of Fabrics</td><td>₱64,000</td><td>Nov 25</td><td><span class="status pending">Pending Verification</span></td></tr>
+              <tr><td class="primary-cell">INV-88190</td><td>Manila Cap Supply</td><td>₱92,500</td><td>Nov 8</td><td><span class="status rejected">Overdue</span></td></tr>
+              <tr><td class="primary-cell">INV-88144</td><td>House of Fabrics</td><td>₱118,000</td><td>Nov 12</td><td><span class="status approved">Paid</span></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>Budget utilization</h2></div>
+          <div class="panel-body">
+            <div class="bar-row"><div class="bar-label"><span>Procurement</span><span>78%</span></div><div class="bar warn"><span style="width:78%"></span></div></div>
+            <div class="bar-row"><div class="bar-label"><span>Inventory</span><span>61%</span></div><div class="bar"><span style="width:61%"></span></div></div>
+            <div class="bar-row"><div class="bar-label"><span>Logistics</span><span>92%</span></div><div class="bar danger"><span style="width:92%"></span></div></div>
+            <div class="bar-row"><div class="bar-label"><span>Marketing / Creative</span><span>45%</span></div><div class="bar ok"><span style="width:45%"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Recent financial transactions</h2></div>
+        <ul class="list">
+          <li><div>Payment to House of Fabrics<small>PAY-2026-118 · Nov 9</small></div><strong>₱118,000</strong></li>
+          <li><div>J&amp;T delivery fee<small>EXP-2026-212 · Nov 8</small></div><strong>₱3,450</strong></li>
+        </ul>
+        <div class="note">Admin monitors only. Recording payments and expenses is done in the Finance department.</div>
+      </div>
+    </section>
+
+    <!-- ================= RECEIPTS AND DOCUMENTS ================= -->
+    <section class="page" id="documents">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">MANAGEMENT</div><h1>Receipts and Documents</h1>
+        <p class="subtitle">View and organize business records by category, reference number and department.</p></div>
+        <div class="actions"><button class="button button-dark">Upload document</button></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Categories</h2></div>
+        <div class="doc-cats">
+          <div>Requisition forms<span>48 records</span></div><div>Approval records<span>41 records</span></div>
+          <div>Purchase orders<span>36 records</span></div><div>Supplier invoices<span>29 records</span></div>
+          <div>Supplier receipts<span>24 records</span></div><div>Goods Received Notes<span>22 records</span></div>
+          <div>Stock issuance slips<span>31 records</span></div><div>Stock-in records<span>19 records</span></div>
+          <div>Stock discrepancy reports<span>4 records</span></div><div>Delivery receipts<span>27 records</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="search" placeholder="Search reference number"><select><option>All categories</option></select><select><option>All departments</option></select></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>REFERENCE</th><th>CATEGORY</th><th>DATE</th><th>DEPARTMENT</th><th>STATUS</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">GRN-2026-033</td><td>Goods Received Note</td><td>Nov 9, 2026</td><td>Inventory</td><td><span class="status approved">Filed</span></td></tr>
+            <tr><td class="primary-cell">INV-88231</td><td>Supplier invoice</td><td>Nov 8, 2026</td><td>Finance</td><td><span class="status pending">For review</span></td></tr>
+            <tr><td class="primary-cell">DR-2026-027</td><td>Delivery receipt</td><td>Nov 5, 2026</td><td>Logistics</td><td><span class="status approved">Filed</span></td></tr>
+            <tr><td class="primary-cell">SDR-2026-004</td><td>Stock discrepancy report</td><td>Nov 5, 2026</td><td>Inventory</td><td><span class="status rejected">Open</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ================= REPORTS ================= -->
+    <section class="page" id="reports">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">MANAGEMENT</div><h1>Reports</h1>
+        <p class="subtitle">Choose a report type, set filters, preview the result, then export or print.</p></div>
+        <div class="actions"><button class="button button-light">Print</button><button class="button button-dark">Export CSV</button></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Report type</h2></div>
+        <div class="doc-cats">
+          <div>Requisition Reports<span>Requests by status and department</span></div>
+          <div>Inventory Reports<span>Stock levels and movements</span></div>
+          <div>Purchasing Reports<span>Purchase orders and suppliers</span></div>
+          <div>Delivery Reports<span>Arrivals, delays and issues</span></div>
+          <div>Finance Reports<span>Budget, expenses and payments</span></div>
+          <div>User and Transaction Activity<span>Who did what, and when</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="date" aria-label="From date"><input type="date" aria-label="To date"><select><option>All departments</option></select><select><option>All statuses</option></select><button class="button button-dark">Generate preview</button></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>REFERENCE</th><th>DEPARTMENT</th><th>DATE</th><th>STATUS</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">REQ-2026-0128</td><td>Marketing / Creative</td><td>Nov 9, 2026</td><td><span class="status pending">Pending Approval</span></td></tr>
+            <tr><td class="primary-cell">REQ-2026-0119</td><td>Marketing / Creative</td><td>Nov 3, 2026</td><td><span class="status approved">Completed</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="note">The preview shows the first rows of the selected report. Full results appear in the export.</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

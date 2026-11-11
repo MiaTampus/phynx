@@ -1,0 +1,784 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="purchasing/procurement_dashboard.css">
+
+    <title>Pynx Procurement Dashboard</title>
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sb">
+
+        <img class="logo"
+     src="assets/images/pynx-logo-transparent.png"
+     alt="Pynx - Beyond the Trend">
+
+        <nav class="nav" id="nav"></nav>
+
+        <div class="who">
+            <b>Procurement Department</b>
+            Purchasing Manager / Staff
+        </div>
+
+    </aside>
+
+    <main id="main"></main>
+
+</div>
+
+<div id="layer"></div>
+
+<script>
+
+const $ = s => document.querySelector(s);
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;'
+}[c]));
+
+const peso = n => '₱' + Number(n).toLocaleString('en-PH');
+
+const CLS = {
+    Pending: 'Pen',
+    Approved: 'All',
+    Ordered: 'Part',
+    Sent: 'Part',
+    Confirmed: 'All',
+    Received: 'Rel',
+    Delayed: 'Out',
+    Scheduled: 'Part',
+    Rejected: 'Out',
+    Active: 'In',
+    Inactive: 'Out',
+    Open: 'Pen',
+    Resolved: 'Rel',
+    'In Stock': 'In',
+    'Low Stock': 'Low',
+    'Out of Stock': 'Out'
+};
+
+const pill = s =>
+    `<span class="pill ${CLS[s] || 'Pen'}">${esc(s)}</span>`;
+
+const D = {
+
+    suppliers: [
+        {id:'SUP-001',name:'ABC Textile Co.',item:'Fabrics',contact:'0917 000 0001',status:'Active'},
+        {id:'SUP-002',name:'Fabric Plus Inc.',item:'Fabrics, trims',contact:'0917 000 0002',status:'Active'},
+        {id:'SUP-003',name:'PrintWorks Co.',item:'Printing materials',contact:'0917 000 0003',status:'Active'}
+    ],
+
+    reqs: [
+        {id:'REQ-001',item:'Fabric Samples',from:'Marketing',qty:5,status:'Approved'},
+        {id:'REQ-002',item:'Printing Materials',from:'Marketing',qty:10,status:'Pending'},
+        {id:'REQ-004',item:'Packaging Supplies',from:'Logistics',qty:50,status:'Approved'}
+    ],
+
+    prs: [
+        {id:'PR-001',item:'Fabric Materials',qty:20,supplier:'ABC Textile Co.',cost:30000,status:'Pending'},
+        {id:'PR-002',item:'Packaging Supplies',qty:50,supplier:'Fabric Plus Inc.',cost:12500,status:'Approved'},
+        {id:'PR-003',item:'Printing Materials',qty:15,supplier:'PrintWorks Co.',cost:9000,status:'Ordered'}
+    ],
+
+    pos: [
+        {id:'PO-2025-045',pr:'PR-003',supplier:'PrintWorks Co.',item:'Printing Materials',qty:15,total:9000,date:'2025-04-24',status:'Confirmed'}
+    ],
+
+    inv: [
+        {id:'INV-001',item:'Cotton Fabric',unit:'meters',stock:120,min:50},
+        {id:'INV-002',item:'Packaging Materials',unit:'pieces',stock:30,min:40},
+        {id:'INV-003',item:'Printing Materials',unit:'pieces',stock:5,min:10},
+        {id:'INV-004',item:'Zippers',unit:'pieces',stock:0,min:30}
+    ],
+
+    dels: [
+        {id:'DEL-2025-001',po:'PO-2025-045',supplier:'PrintWorks Co.',date:'Apr 28, 2025',status:'Scheduled'},
+        {id:'DEL-2025-002',po:'PO-2025-046',supplier:'ABC Textile Co.',date:'Apr 29, 2025',status:'Delayed'}
+    ],
+
+    disc: [
+        {id:'DSC-001',del:'DEL-2025-003',issue:'Damaged items (3 rolls)',supplier:'Fabric Plus Inc.',status:'Open'}
+    ]
+
+};
+
+const stockStatus = i =>
+    i.stock === 0 ? 'Out of Stock' :
+    i.stock < i.min ? 'Low Stock' : 'In Stock';
+
+const nextId = (p,a) =>
+    p + '-' + String(a.length + 1).padStart(3,'0');
+
+
+/* SIDEBAR NAVIGATION */
+
+const VIEWS = [
+    ['dashboard','▦','Dashboard'],
+    ['requisition','☷','Requisition'],
+    ['inventory','▤','Inventory'],
+    ['purchasing','◇','Purchasing'],
+    ['delivery','▷','Delivery']
+];
+
+let view = 'dashboard';
+let tab = 'Purchase Requests';
+let q = '';
+
+
+function toast(m) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = m;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(),2200);
+}
+
+function modal(html) {
+    $('#layer').innerHTML = `
+        <div class="modal" onclick="if(event.target===this)closeM()">
+            <div class="card">${html}</div>
+        </div>
+    `;
+}
+
+function closeM() {
+    $('#layer').innerHTML = '';
+}
+
+function go(v,t) {
+    view = v;
+    if(t) tab = t;
+    q = '';
+    render();
+}
+
+function table(cols,rows) {
+    return `
+        <div class="tw">
+            <table>
+                <thead>
+                    <tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr>
+                </thead>
+                <tbody>
+                    ${rows.join('') || `
+                        <tr>
+                            <td colspan="${cols.length}" class="mut">
+                                Nothing here yet.
+                            </td>
+                        </tr>
+                    `}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+const has = o =>
+    !q || JSON.stringify(o).toLowerCase().includes(q.toLowerCase());
+
+const search = ph => `
+    <input
+        placeholder="${ph}"
+        value="${esc(q)}"
+        oninput="q=this.value;render(true)"
+        aria-label="Search">
+`;
+
+
+/* DASHBOARD */
+
+function dashboard() {
+
+    const pend = D.prs.filter(p => p.status === 'Pending').length;
+
+    return `
+        <h1>Welcome to Procurement!</h1>
+        <p class="sub">Purchasing and supplier overview</p>
+
+        <div class="grid g4">
+
+            <div class="card">
+                <div class="mut">Purchase Requests</div>
+                <div class="big">${D.prs.length}</div>
+                <div class="mut">Total requests</div>
+            </div>
+
+            <div class="card">
+                <div class="mut">Pending Approvals</div>
+                <div class="big">${pend}</div>
+                <div class="mut">Awaiting Admin</div>
+            </div>
+
+            <div class="card">
+                <div class="mut">Active Purchase Orders</div>
+                <div class="big">${D.pos.length}</div>
+                <div class="mut">Currently processing</div>
+            </div>
+
+            <div class="card">
+                <div class="mut">Pending Deliveries</div>
+                <div class="big">${D.dels.length}</div>
+                <div class="mut">Awaiting arrival</div>
+            </div>
+
+        </div>
+
+        <div class="grid g2">
+
+            <div class="card">
+                <h2>Quick Actions</h2>
+
+                <div class="row">
+                    <span>
+                        <b>Create Purchase Request</b><br>
+                        <span class="mut">Prepare a new purchase request</span>
+                    </span>
+                    <button class="pri sm" onclick="newPR()">Create</button>
+                </div>
+
+                <div class="row">
+                    <span>
+                        <b>Manage Suppliers</b><br>
+                        <span class="mut">View and update supplier records</span>
+                    </span>
+                    <button class="sm" onclick="go('purchasing','Suppliers')">Open</button>
+                </div>
+
+                <div class="row">
+                    <span>
+                        <b>Create Purchase Order</b><br>
+                        <span class="mut">From an approved purchase request</span>
+                    </span>
+                    <button class="sm" onclick="go('purchasing','Purchase Orders')">Open</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Recent Purchase Requests</h2>
+
+                ${D.prs.map(p => `
+                    <div class="row">
+                        <span>
+                            <b>${esc(p.item)}</b><br>
+                            <span class="mut">${p.id} · ${p.qty} units</span>
+                        </span>
+                        ${pill(p.status)}
+                    </div>
+                `).join('')}
+            </div>
+
+        </div>
+
+        <div class="card">
+            <h2>Supplier and Delivery Updates</h2>
+
+            <div class="row">
+                <span>${D.dels.length} deliveries are on the way or delayed.</span>
+                <button class="sm" onclick="go('delivery')">View</button>
+            </div>
+
+            <div class="row">
+                <span>${D.disc.filter(d => d.status === 'Open').length} discrepancy awaiting supplier response.</span>
+                <button class="sm" onclick="go('delivery','Discrepancies')">View</button>
+            </div>
+        </div>
+    `;
+}
+
+
+/* REQUISITION */
+
+function requisition() {
+
+    const rows = D.reqs.filter(has).map(r => `
+        <tr>
+            <td>${r.id}</td>
+            <td>${esc(r.item)}</td>
+            <td>${r.from}</td>
+            <td>${r.qty}</td>
+            <td>${pill(r.status)}</td>
+            <td class="r">
+                ${r.status === 'Approved'
+                    ? `<button class="sm pri" onclick="newPR('${r.id}')">Make purchase request</button>`
+                    : ''
+                }
+            </td>
+        </tr>
+    `);
+
+    return `
+        <h1>Requisition</h1>
+        <p class="sub">Approved requisitions that need purchasing. Procurement acts as Purchasing Handler.</p>
+
+        <div class="card">
+            <div class="tools">${search('Search requisitions')}</div>
+            ${table(['ID','Item','Requested by','Qty','Status',''],rows)}
+        </div>
+    `;
+}
+
+
+/* INVENTORY */
+
+function inventory() {
+
+    const rows = D.inv.filter(has).map(i => {
+
+        const s = stockStatus(i);
+
+        return `
+            <tr>
+                <td>${i.id}</td>
+                <td>${esc(i.item)}</td>
+                <td>${i.stock} ${i.unit}</td>
+                <td>${i.min}</td>
+                <td>${pill(s)}</td>
+                <td class="r">
+                    ${s !== 'In Stock'
+                        ? `<button class="sm" onclick="newPR('', '${esc(i.item)}')">Request restock</button>`
+                        : ''
+                    }
+                </td>
+            </tr>
+        `;
+    });
+
+    return `
+        <h1>Inventory</h1>
+        <p class="sub">View-only stock levels. Procurement acts as Purchasing Coordinator.</p>
+
+        <div class="card">
+            <div class="tools">${search('Search products')}</div>
+            ${table(['ID','Product','In stock','Minimum','Status',''],rows)}
+        </div>
+    `;
+}
+
+
+/* PURCHASING */
+
+function purchasing() {
+
+    const T = ['Purchase Requests','Purchase Orders','Suppliers'];
+    let body = '';
+
+    if(tab === 'Purchase Requests') {
+
+        body = `
+            <div class="tools">
+                ${search('Search purchase requests')}
+                <button class="pri" onclick="newPR()">New purchase request</button>
+            </div>
+        ` + table(
+            ['ID','Item','Qty','Supplier','Est. cost','Status',''],
+            D.prs.filter(has).map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${esc(p.item)}</td>
+                    <td>${p.qty}</td>
+                    <td>${esc(p.supplier)}</td>
+                    <td>${peso(p.cost)}</td>
+                    <td>${pill(p.status)}</td>
+                    <td class="r">
+                        ${p.status === 'Approved'
+                            ? `<button class="sm pri" onclick="makePO('${p.id}')">Create PO</button>`
+                            : p.status === 'Pending'
+                                ? `<button class="sm" onclick="approve('${p.id}')">Mark approved (demo)</button>`
+                                : ''
+                        }
+                    </td>
+                </tr>
+            `)
+        );
+
+    }
+
+    if(tab === 'Purchase Orders') {
+
+        body = `
+            <div class="tools">
+                ${search('Search purchase orders')}
+            </div>
+        ` + table(
+            ['PO number','Supplier','Item','Qty','Total','Date','Status',''],
+            D.pos.filter(has).map(o => `
+                <tr>
+                    <td>${o.id}</td>
+                    <td>${esc(o.supplier)}</td>
+                    <td>${esc(o.item)}</td>
+                    <td>${o.qty}</td>
+                    <td>${peso(o.total)}</td>
+                    <td>${o.date}</td>
+                    <td>${pill(o.status)}</td>
+                    <td class="r">
+                        <button class="sm" onclick="receipt('${o.id}')">Receipt</button>
+                    </td>
+                </tr>
+            `)
+        );
+
+    }
+
+    if(tab === 'Suppliers') {
+
+        body = `
+            <div class="tools">
+                ${search('Search suppliers')}
+                <button class="pri" onclick="newSup()">Add supplier</button>
+            </div>
+        ` + table(
+            ['ID','Supplier','Supplies','Contact','Status'],
+            D.suppliers.filter(has).map(s => `
+                <tr>
+                    <td>${s.id}</td>
+                    <td>${esc(s.name)}</td>
+                    <td>${esc(s.item)}</td>
+                    <td>${esc(s.contact)}</td>
+                    <td>${pill(s.status)}</td>
+                </tr>
+            `)
+        );
+
+    }
+
+    return `
+        <h1>Purchasing</h1>
+        <p class="sub">Create requests, place orders, and manage suppliers.</p>
+
+        <div class="tabs">
+            ${T.map(t => `
+                <button
+                    class="${t === tab ? 'on' : ''}"
+                    onclick="tab='${t}';q='';render()">
+                    ${t}
+                </button>
+            `).join('')}
+        </div>
+
+        <div class="card">${body}</div>
+    `;
+}
+
+
+/* DELIVERY */
+
+function delivery() {
+
+    const T = ['Incoming Deliveries','Discrepancies'];
+
+    if(!T.includes(tab)) tab = T[0];
+
+    const body = tab === T[0]
+
+        ? table(
+            ['Delivery ID','PO number','Supplier','Expected','Status'],
+            D.dels.map(d => `
+                <tr>
+                    <td>${d.id}</td>
+                    <td>${d.po}</td>
+                    <td>${esc(d.supplier)}</td>
+                    <td>${d.date}</td>
+                    <td>${pill(d.status)}</td>
+                </tr>
+            `)
+        )
+
+        : table(
+            ['ID','Delivery','Issue','Supplier','Status',''],
+            D.disc.map(d => `
+                <tr>
+                    <td>${d.id}</td>
+                    <td>${d.del}</td>
+                    <td>${esc(d.issue)}</td>
+                    <td>${esc(d.supplier)}</td>
+                    <td>${pill(d.status)}</td>
+                    <td class="r">
+                        ${d.status === 'Open'
+                            ? `<button class="sm" onclick="resolveD('${d.id}')">Mark supplier resolved</button>`
+                            : ''
+                        }
+                    </td>
+                </tr>
+            `)
+        );
+
+    return `
+        <h1>Delivery</h1>
+        <p class="sub">Follow up suppliers on incoming deliveries and discrepancies. Procurement acts as Supplier Coordinator.</p>
+
+        <div class="tabs">
+            ${T.map(t => `
+                <button
+                    class="${t === tab ? 'on' : ''}"
+                    onclick="tab='${t}';render()">
+                    ${t}
+                </button>
+            `).join('')}
+        </div>
+
+        <div class="card">${body}</div>
+    `;
+}
+
+
+/* PURCHASE REQUEST MODAL */
+
+function newPR(reqId,item) {
+
+    const r = D.reqs.find(x => x.id === reqId);
+
+    modal(`
+        <h2>New purchase request</h2>
+
+        <label for="f1">Item</label>
+        <input id="f1" value="${esc(r ? r.item : item || '')}">
+
+        <label for="f2">Quantity</label>
+        <input id="f2" type="number" min="1" value="${r ? r.qty : 1}">
+
+        <label for="f3">Supplier</label>
+        <select id="f3">
+            ${D.suppliers.filter(s => s.status === 'Active')
+                .map(s => `<option>${esc(s.name)}</option>`).join('')}
+        </select>
+
+        <label for="f4">Estimated cost (₱)</label>
+        <input id="f4" type="number" min="0" value="0">
+
+        <div class="tools" style="margin-top:16px;justify-content:flex-end">
+            <button onclick="closeM()">Cancel</button>
+            <button class="pri" onclick="savePR()">Save request</button>
+        </div>
+    `);
+}
+
+function savePR() {
+
+    const item = $('#f1').value.trim();
+    const qty = +$('#f2').value;
+
+    if(!item || qty < 1) {
+        toast('Enter an item and a quantity of at least 1');
+        return;
+    }
+
+    D.prs.unshift({
+        id: nextId('PR',D.prs),
+        item,
+        qty,
+        supplier: $('#f3').value,
+        cost: +$('#f4').value || 0,
+        status: 'Pending'
+    });
+
+    closeM();
+    go('purchasing','Purchase Requests');
+    toast('Purchase request saved');
+}
+
+function approve(id) {
+
+    D.prs.find(p => p.id === id).status = 'Approved';
+
+    render();
+    toast('Marked approved. Real approval is done by Admin.');
+}
+
+function makePO(id) {
+
+    const p = D.prs.find(x => x.id === id);
+    p.status = 'Ordered';
+
+    D.pos.unshift({
+        id: 'PO-2026-' + String(D.pos.length + 1).padStart(3,'0'),
+        pr: id,
+        supplier: p.supplier,
+        item: p.item,
+        qty: p.qty,
+        total: p.cost,
+        date: new Date().toISOString().slice(0,10),
+        status: 'Sent'
+    });
+
+    go('purchasing','Purchase Orders');
+    toast('Purchase order created');
+}
+
+
+/* RECEIPT */
+
+function receipt(id) {
+
+    const o = D.pos.find(x => x.id === id);
+
+    modal(`
+        <h2>Purchase order receipt</h2>
+
+        <div class="rc">
+
+            <div class="row">
+                <span>PO number</span>
+                <b>${o.id}</b>
+            </div>
+
+            <div class="row">
+                <span>Date</span>
+                <span>${o.date}</span>
+            </div>
+
+            <div class="row">
+                <span>Supplier</span>
+                <span>${esc(o.supplier)}</span>
+            </div>
+
+            <div class="row">
+                <span>Item</span>
+                <span>${esc(o.item)}</span>
+            </div>
+
+            <div class="row">
+                <span>Quantity</span>
+                <span>${o.qty}</span>
+            </div>
+
+            <div class="row">
+                <span>Total</span>
+                <b>${peso(o.total)}</b>
+            </div>
+
+        </div>
+
+        <div class="tools noprint" style="margin-top:16px;justify-content:flex-end">
+            <button onclick="closeM()">Close</button>
+            <button class="pri" onclick="window.print()">Print receipt</button>
+        </div>
+    `);
+}
+
+
+/* SUPPLIERS */
+
+function newSup() {
+
+    modal(`
+        <h2>Add supplier</h2>
+
+        <label for="s1">Name</label>
+        <input id="s1">
+
+        <label for="s2">Supplies</label>
+        <input id="s2">
+
+        <label for="s3">Contact</label>
+        <input id="s3">
+
+        <div class="tools" style="margin-top:16px;justify-content:flex-end">
+            <button onclick="closeM()">Cancel</button>
+            <button class="pri" onclick="saveSup()">Save supplier</button>
+        </div>
+    `);
+}
+
+function saveSup() {
+
+    const name = $('#s1').value.trim();
+
+    if(!name) {
+        toast('Enter the supplier name');
+        return;
+    }
+
+    D.suppliers.push({
+        id: nextId('SUP',D.suppliers),
+        name,
+        item: $('#s2').value,
+        contact: $('#s3').value,
+        status: 'Active'
+    });
+
+    closeM();
+    render();
+    toast('Supplier saved');
+}
+
+
+/* DISCREPANCIES */
+
+function resolveD(id) {
+
+    D.disc.find(d => d.id === id).status = 'Resolved';
+
+    render();
+    toast('Discrepancy marked resolved');
+}
+
+
+/* RENDER SIDEBAR AND PAGE */
+
+function render(keep) {
+
+    $('#nav').innerHTML = VIEWS.map(([k,i,l]) => `
+        <a
+            class="${k === view ? 'on' : ''}"
+            tabindex="0"
+            onclick="go('${k}')"
+            onkeydown="if(event.key==='Enter')go('${k}')">
+
+            <span class="nav-icon">${i}</span>
+            <span>${l}</span>
+
+        </a>
+    `).join('') + `
+
+        <a
+    href="../Log_in/login.html"
+    class="logout-link"
+    onclick="return confirm('Are you sure you want to log out?')">
+
+    <span class="nav-icon">⇥</span>
+    <span>Logout</span>
+
+</a>
+
+    `;
+
+    const y = window.scrollY;
+
+    $('#main').innerHTML =
+        ({dashboard,requisition,inventory,purchasing,delivery})[view]();
+
+    if(keep) {
+
+        const el = document.querySelector('main input');
+
+        if(el) {
+            el.focus();
+            el.setSelectionRange(q.length,q.length);
+        }
+
+        window.scrollTo(0,y);
+    }
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,873 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="logistics_dashboard.css">
+
+    <title>Pynx Logistics Dashboard</title>
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sb">
+
+        <img class="logo"
+     src="assets/images/pynx-logo-transparent.png"
+     alt="Pynx - Beyond the Trend">
+
+        <nav class="nav" id="nav"></nav>
+
+        <div class="who">
+            <b>Logistics Department</b>
+            Delivery Handler / Receiving Staff
+        </div>
+
+    </aside>
+
+    <main id="main"></main>
+
+</div>
+
+<div id="layer"></div>
+
+<script>
+
+const $ = s => document.querySelector(s);
+
+const esc = s => String(s).replace(/[&<>"']/g,c => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+}[c]));
+
+const CLS = {
+    Pending:'Pen',
+    Scheduled:'Part',
+    Received:'Part',
+    Completed:'Rel',
+    'With Issues':'Out',
+    Delayed:'Out',
+    Approved:'All',
+    Rejected:'Out',
+    Open:'Pen',
+    Resolved:'Rel'
+};
+
+const pill = s =>
+    `<span class="pill ${CLS[s] || 'Pen'}">${esc(s)}</span>`;
+
+const D = {
+
+    dels: [
+        {
+            id:'DEL-2025-001',
+            po:'PO-2025-045',
+            supplier:'ABC Textile Co.',
+            date:'Apr 28, 2025',
+            items:'Cotton Fabric x50 m',
+            status:'Pending'
+        },
+        {
+            id:'DEL-2025-002',
+            po:'PO-2025-046',
+            supplier:'Fabric Plus Inc.',
+            date:'Apr 29, 2025',
+            items:'Packaging Supplies x50',
+            status:'Pending'
+        },
+        {
+            id:'DEL-2025-003',
+            po:'PO-2025-047',
+            supplier:'PrintWorks Co.',
+            date:'Apr 30, 2025',
+            items:'Printing Materials x15',
+            status:'Scheduled'
+        },
+        {
+            id:'DEL-2025-004',
+            po:'PO-2025-044',
+            supplier:'ABC Textile Co.',
+            date:'Apr 26, 2025',
+            items:'Zippers x200',
+            status:'Received'
+        },
+        {
+            id:'DEL-2025-005',
+            po:'PO-2025-043',
+            supplier:'Fabric Plus Inc.',
+            date:'Apr 24, 2025',
+            items:'Buttons x500',
+            status:'Completed'
+        },
+        {
+            id:'DEL-2025-006',
+            po:'PO-2025-042',
+            supplier:'PrintWorks Co.',
+            date:'Apr 23, 2025',
+            items:'Fabric Rolls x10',
+            status:'With Issues'
+        }
+    ],
+
+    disc: [
+        {
+            id:'DSC-001',
+            del:'DEL-2025-006',
+            issue:'Damaged items (3 rolls)',
+            status:'Open',
+            res:''
+        }
+    ],
+
+    reqs: [
+        {
+            id:'REQ-004',
+            item:'Packaging Supplies',
+            qty:50,
+            status:'Approved'
+        },
+        {
+            id:'REQ-005',
+            item:'Shipping Labels',
+            qty:200,
+            status:'Pending'
+        },
+        {
+            id:'REQ-006',
+            item:'Pallet Wrap',
+            qty:10,
+            status:'Rejected'
+        }
+    ]
+
+};
+
+
+/* SIDEBAR NAVIGATION */
+
+const VIEWS = [
+    ['dashboard','▦','Dashboard'],
+    ['requisition','☷','Requisition'],
+    ['delivery','▷','Delivery']
+];
+
+const TABS = [
+    'Incoming Deliveries',
+    'Inspection',
+    'Discrepancies',
+    'Resolutions',
+    'Reports'
+];
+
+let view = 'dashboard';
+let tab = TABS[0];
+let q = '';
+
+const nextId = (p,a) =>
+    p + '-' + String(a.length + 1).padStart(3,'0');
+
+const by = s =>
+    D.dels.filter(d => s.includes(d.status));
+
+const find = id =>
+    D.dels.find(d => d.id === id);
+
+
+/* GENERAL FUNCTIONS */
+
+function toast(m) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = m;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(),2200);
+}
+
+function modal(h) {
+    $('#layer').innerHTML = `
+        <div class="modal" onclick="if(event.target===this)closeM()">
+            <div class="card">${h}</div>
+        </div>
+    `;
+}
+
+function closeM() {
+    $('#layer').innerHTML = '';
+}
+
+function go(v,t) {
+    view = v;
+    if(t) tab = t;
+    q = '';
+    render();
+}
+
+const has = o =>
+    !q || JSON.stringify(o).toLowerCase().includes(q.toLowerCase());
+
+const search = ph => `
+    <input
+        placeholder="${ph}"
+        value="${esc(q)}"
+        oninput="q=this.value;render(true)"
+        aria-label="Search">
+`;
+
+const table = (cols,rows) => `
+    <div class="tw">
+        <table>
+            <thead>
+                <tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr>
+            </thead>
+            <tbody>
+                ${rows.join('') || `
+                    <tr>
+                        <td colspan="${cols.length}" class="mut">
+                            Nothing here yet.
+                        </td>
+                    </tr>
+                `}
+            </tbody>
+        </table>
+    </div>
+`;
+
+const btns = (...b) => `
+    <div class="tools noprint"
+         style="margin-top:16px;justify-content:flex-end">
+        ${b.join('')}
+    </div>
+`;
+
+const cancel = '<button onclick="closeM()">Cancel</button>';
+
+
+/* DASHBOARD */
+
+function dashboard() {
+
+    const inc = by(['Pending','Scheduled','Delayed']);
+    const open = D.disc.filter(d => d.status === 'Open');
+
+    return `
+        <h1>Welcome to Logistics!</h1>
+        <p class="sub">
+            Receive, inspect, and report on incoming deliveries.
+        </p>
+
+        <div class="grid g4">
+
+            <div class="card">
+                <div class="mut">Incoming Deliveries</div>
+                <div class="big">${inc.length}</div>
+                <div class="mut">Expected deliveries</div>
+            </div>
+
+            <div class="card">
+                <div class="mut">Pending Inspections</div>
+                <div class="big">${by(['Received']).length}</div>
+                <div class="mut">Awaiting inspection</div>
+            </div>
+
+            <div class="card">
+                <div class="mut">Discrepancies</div>
+                <div class="big">${open.length}</div>
+                <div class="mut">Missing or damaged items</div>
+            </div>
+
+            <div class="card">
+                <div class="mut">Completed Deliveries</div>
+                <div class="big">${by(['Completed']).length}</div>
+                <div class="mut">Successfully inspected</div>
+            </div>
+
+        </div>
+
+        <div class="grid g2">
+
+            <div class="card">
+                <h2>Quick Actions</h2>
+
+                <div class="row">
+                    <span>
+                        <b>Receive Delivery</b><br>
+                        <span class="mut">Record an arrived delivery</span>
+                    </span>
+                    <button class="pri sm"
+                        onclick="go('delivery','Incoming Deliveries')">
+                        Receive
+                    </button>
+                </div>
+
+                <div class="row">
+                    <span>
+                        <b>Start Inspection</b><br>
+                        <span class="mut">Check received items</span>
+                    </span>
+                    <button class="sm"
+                        onclick="go('delivery','Inspection')">
+                        Inspect
+                    </button>
+                </div>
+
+                <div class="row">
+                    <span>
+                        <b>Report Discrepancy</b><br>
+                        <span class="mut">Missing or damaged items</span>
+                    </span>
+                    <button class="sm" onclick="reportD()">Report</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Delivery Alerts</h2>
+
+                <div class="row">
+                    <span>${open.length} deliveries have discrepancies.</span>
+                    <button class="sm"
+                        onclick="go('delivery','Discrepancies')">
+                        View
+                    </button>
+                </div>
+
+                <div class="row">
+                    <span>${by(['Delayed']).length} delivery is delayed.</span>
+                    <button class="sm"
+                        onclick="go('delivery','Incoming Deliveries')">
+                        View
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card">
+            <h2>Upcoming Deliveries</h2>
+
+            ${table(
+                ['Delivery ID','PO number','Supplier','Expected','Status'],
+                inc.slice(0,3).map(d => `
+                    <tr>
+                        <td>${d.id}</td>
+                        <td>${d.po}</td>
+                        <td>${esc(d.supplier)}</td>
+                        <td>${d.date}</td>
+                        <td>${pill(d.status)}</td>
+                    </tr>
+                `)
+            )}
+        </div>
+    `;
+}
+
+
+/* REQUISITION */
+
+function requisition() {
+
+    return `
+        <h1>Requisition</h1>
+        <p class="sub">
+            Request materials and supplies. Logistics acts as Requester.
+        </p>
+
+        <div class="card">
+
+            <div class="tools">
+                ${search('Search requisitions')}
+                <button class="pri" onclick="newReq()">
+                    New requisition
+                </button>
+            </div>
+
+            ${table(
+                ['ID','Item','Qty','Status'],
+                D.reqs.filter(has).map(r => `
+                    <tr>
+                        <td>${r.id}</td>
+                        <td>${esc(r.item)}</td>
+                        <td>${r.qty}</td>
+                        <td>${pill(r.status)}</td>
+                    </tr>
+                `)
+            )}
+
+        </div>
+    `;
+}
+
+function newReq() {
+
+    modal(`
+        <h2>New requisition</h2>
+
+        <label for="a1">Item</label>
+        <input id="a1">
+
+        <label for="a2">Quantity</label>
+        <input id="a2" type="number" min="1" value="1">
+
+        ${btns(
+            cancel,
+            '<button class="pri" onclick="saveReq()">Submit requisition</button>'
+        )}
+    `);
+}
+
+function saveReq() {
+
+    const item = $('#a1').value.trim();
+    const qty = +$('#a2').value;
+
+    if(!item || qty < 1) {
+        toast('Enter an item and a quantity of at least 1');
+        return;
+    }
+
+    D.reqs.unshift({
+        id:nextId('REQ',D.reqs)+'L',
+        item,
+        qty,
+        status:'Pending'
+    });
+
+    closeM();
+    render();
+    toast('Requisition submitted');
+}
+
+
+/* DELIVERY */
+
+function delivery() {
+
+    let b = '';
+
+    const act = (d,l,f,p) => `
+        <td class="r">
+            <button class="sm ${p?'pri':''}" onclick="${f}('${d}')">
+                ${l}
+            </button>
+        </td>
+    `;
+
+    if(tab === TABS[0]) {
+
+        b = table(
+            ['Delivery ID','PO number','Supplier','Items','Expected','Status',''],
+            by(['Pending','Scheduled','Delayed']).filter(has).map(d => `
+                <tr>
+                    <td>${d.id}</td>
+                    <td>${d.po}</td>
+                    <td>${esc(d.supplier)}</td>
+                    <td>${esc(d.items)}</td>
+                    <td>${d.date}</td>
+                    <td>${pill(d.status)}</td>
+                    ${act(d.id,'Receive','receive',1)}
+                </tr>
+            `)
+        );
+
+    }
+
+    if(tab === TABS[1]) {
+
+        b = table(
+            ['Delivery ID','PO number','Supplier','Items','Status',''],
+            by(['Received']).filter(has).map(d => `
+                <tr>
+                    <td>${d.id}</td>
+                    <td>${d.po}</td>
+                    <td>${esc(d.supplier)}</td>
+                    <td>${esc(d.items)}</td>
+                    <td>${pill(d.status)}</td>
+                    ${act(d.id,'Start inspection','inspect',1)}
+                </tr>
+            `)
+        );
+
+    }
+
+    if(tab === TABS[2]) {
+
+        b = `
+            <div class="tools">
+                <button class="pri" onclick="reportD()">
+                    Report discrepancy
+                </button>
+            </div>
+        ` + table(
+            ['ID','Delivery','Issue','Status',''],
+            D.disc.filter(d => d.status === 'Open' && has(d)).map(d => `
+                <tr>
+                    <td>${d.id}</td>
+                    <td>${d.del}</td>
+                    <td>${esc(d.issue)}</td>
+                    <td>${pill(d.status)}</td>
+                    ${act(d.id,'Resolve','resolve')}
+                </tr>
+            `)
+        );
+
+    }
+
+    if(tab === TABS[3]) {
+
+        b = table(
+            ['ID','Delivery','Issue','Resolution','Status'],
+            D.disc.filter(d => d.status === 'Resolved' && has(d)).map(d => `
+                <tr>
+                    <td>${d.id}</td>
+                    <td>${d.del}</td>
+                    <td>${esc(d.issue)}</td>
+                    <td>${esc(d.res)}</td>
+                    <td>${pill(d.status)}</td>
+                </tr>
+            `)
+        );
+
+    }
+
+    if(tab === TABS[4]) {
+
+        b = `
+            <div class="tools noprint">
+                ${search('Search deliveries')}
+                <button class="pri" onclick="window.print()">
+                    Print report
+                </button>
+            </div>
+        ` + table(
+            ['Delivery ID','PO number','Supplier','Expected','Status',''],
+            D.dels.filter(has).map(d => `
+                <tr>
+                    <td>${d.id}</td>
+                    <td>${d.po}</td>
+                    <td>${esc(d.supplier)}</td>
+                    <td>${d.date}</td>
+                    <td>${pill(d.status)}</td>
+                    ${['Pending','Scheduled','Delayed'].includes(d.status)
+                        ? '<td></td>'
+                        : act(d.id,'Receipt','receipt')
+                    }
+                </tr>
+            `)
+        );
+
+    }
+
+    return `
+        <h1>Delivery</h1>
+        <p class="sub">
+            Logistics acts as Delivery Handler and Receiving Staff.
+        </p>
+
+        <div class="tabs">
+            ${TABS.map(t => `
+                <button
+                    class="${t === tab ? 'on' : ''}"
+                    onclick="tab='${t}';q='';render()">
+                    ${t}
+                </button>
+            `).join('')}
+        </div>
+
+        <div class="card">${b}</div>
+    `;
+}
+
+
+/* RECEIVE DELIVERY */
+
+function receive(id) {
+
+    find(id).status = 'Received';
+
+    receipt(id);
+    render();
+}
+
+function receipt(id) {
+
+    const d = find(id);
+
+    modal(`
+        <h2>Receiving receipt</h2>
+
+        <div class="rc">
+
+            <div class="row">
+                <span>Delivery</span>
+                <b>${d.id}</b>
+            </div>
+
+            <div class="row">
+                <span>PO number</span>
+                <span>${d.po}</span>
+            </div>
+
+            <div class="row">
+                <span>Supplier</span>
+                <span>${esc(d.supplier)}</span>
+            </div>
+
+            <div class="row">
+                <span>Items</span>
+                <span>${esc(d.items)}</span>
+            </div>
+
+            <div class="row">
+                <span>Received on</span>
+                <span>${new Date().toISOString().slice(0,10)}</span>
+            </div>
+
+            <div class="row">
+                <span>Status</span>
+                <span>${esc(d.status)}</span>
+            </div>
+
+        </div>
+
+        ${btns(
+            '<button onclick="closeM()">Close</button>',
+            '<button class="pri" onclick="window.print()">Print receipt</button>'
+        )}
+    `);
+}
+
+
+/* INSPECTION */
+
+function inspect(id) {
+
+    const d = find(id);
+
+    modal(`
+        <h2>Inspect ${d.id}</h2>
+
+        <p class="mut">
+            ${esc(d.items)} from ${esc(d.supplier)}
+        </p>
+
+        <label for="i1">Result</label>
+
+        <select id="i1">
+            <option value="ok">
+                All items complete and in good condition
+            </option>
+            <option value="bad">
+                Missing or damaged items
+            </option>
+        </select>
+
+        <label for="i2">Issue details (if any)</label>
+        <input id="i2" placeholder="Example: 3 rolls damaged">
+
+        ${btns(
+            cancel,
+            `<button class="pri" onclick="saveInspect('${id}')">Save inspection</button>`
+        )}
+    `);
+}
+
+function saveInspect(id) {
+
+    const d = find(id);
+    const bad = $('#i1').value === 'bad';
+    const t = $('#i2').value.trim();
+
+    if(bad && !t) {
+        toast('Describe the missing or damaged items');
+        return;
+    }
+
+    if(bad) {
+
+        d.status = 'With Issues';
+
+        D.disc.push({
+            id:nextId('DSC',D.disc),
+            del:id,
+            issue:t,
+            status:'Open',
+            res:''
+        });
+
+    } else {
+
+        d.status = 'Completed';
+
+    }
+
+    closeM();
+
+    go('delivery',bad ? 'Discrepancies' : 'Inspection');
+
+    toast(
+        bad
+            ? 'Discrepancy reported'
+            : 'Delivery completed. Inventory can record the stock-in.'
+    );
+}
+
+
+/* REPORT DISCREPANCY */
+
+function reportD() {
+
+    modal(`
+        <h2>Report discrepancy</h2>
+
+        <label for="r1">Delivery</label>
+
+        <select id="r1">
+            ${D.dels.filter(d =>
+                !['Pending','Scheduled','Delayed'].includes(d.status)
+            ).map(d => `
+                <option value="${d.id}">
+                    ${d.id} - ${esc(d.supplier)}
+                </option>
+            `).join('')}
+        </select>
+
+        <label for="r2">Issue</label>
+        <input id="r2" placeholder="Missing or damaged items">
+
+        ${btns(
+            cancel,
+            '<button class="pri" onclick="saveD()">Report</button>'
+        )}
+    `);
+}
+
+function saveD() {
+
+    const id = $('#r1').value;
+    const t = $('#r2').value.trim();
+
+    if(!id || !t) {
+        toast('Pick a received delivery and describe the issue');
+        return;
+    }
+
+    find(id).status = 'With Issues';
+
+    D.disc.push({
+        id:nextId('DSC',D.disc),
+        del:id,
+        issue:t,
+        status:'Open',
+        res:''
+    });
+
+    closeM();
+    go('delivery','Discrepancies');
+    toast('Discrepancy reported');
+}
+
+
+/* RESOLVE DISCREPANCY */
+
+function resolve(id) {
+
+    modal(`
+        <h2>Resolve ${id}</h2>
+
+        <label for="v1">
+            Resolution agreed with supplier
+        </label>
+
+        <select id="v1">
+            <option>Replacement</option>
+            <option>Refund</option>
+            <option>Credit note</option>
+        </select>
+
+        ${btns(
+            cancel,
+            `<button class="pri" onclick="saveRes('${id}')">Save resolution</button>`
+        )}
+    `);
+}
+
+function saveRes(id) {
+
+    const x = D.disc.find(d => d.id === id);
+
+    x.status = 'Resolved';
+    x.res = $('#v1').value;
+
+    find(x.del).status = 'Completed';
+
+    closeM();
+    go('delivery','Resolutions');
+    toast('Discrepancy resolved');
+}
+
+
+/* SIDEBAR AND PAGE RENDERING */
+
+function render(keep) {
+
+    $('#nav').innerHTML = VIEWS.map(([k,i,l]) => `
+        <a
+            class="${k === view ? 'on' : ''}"
+            tabindex="0"
+            onclick="go('${k}')"
+            onkeydown="if(event.key==='Enter')go('${k}')">
+
+            <span class="nav-icon">${i}</span>
+            <span>${l}</span>
+
+        </a>
+    `).join('') + `
+
+        <a href="../Log_in/login.html"
+   class="logout-link"
+   onclick="return confirm('Are you sure you want to log out?')">
+    <span class="nav-icon">⇥</span>
+    <span>Logout</span>
+</a>
+
+    `;
+
+    const y = window.scrollY;
+
+    $('#main').innerHTML =
+        ({dashboard,requisition,delivery})[view]();
+
+    if(keep) {
+
+        const el = document.querySelector('main input');
+
+        if(el) {
+            el.focus();
+            el.setSelectionRange(q.length,q.length);
+        }
+
+        window.scrollTo(0,y);
+    }
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>

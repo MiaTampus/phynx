@@ -1,0 +1,28 @@
+/* Finance dashboard (loads after admin_dashboard.css) */
+
+/* Active sidebar item for Finance pages */
+body:has(#dashboard:target) .nav a[href="#dashboard"],
+body:has(#budget:target) .nav a[href="#budget"],
+body:has(#expenses:target) .nav a[href="#expenses"],
+body:has(#invoices:target) .nav a[href="#invoices"],
+body:has(#payments:target) .nav a[href="#payments"],
+body:has(#transactions:target) .nav a[href="#transactions"],
+body:has(#reports:target) .nav a[href="#reports"],
+body:has(#documents:target) .nav a[href="#documents"] { color: #fff; background: #3a3a3a; }
+
+/* Five summary cards on the Finance dashboard */
+.metrics.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.metrics.five .metric-value { font-size: 26px; }
+@media (max-width: 1250px) { .metrics.five { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 800px)  { .metrics.five { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px)  { .metrics.five { grid-template-columns: 1fr; } }
+
+/* Simple monthly bar chart (pure CSS).
+   Extra top padding leaves room for the value label above the tallest bar. */
+.chart { display: flex; align-items: flex-end; gap: 14px; height: 250px; padding: 48px 22px 14px; }
+.chart .col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; gap: 8px; font-size: 11px; color: var(--muted); }
+.chart .col i { display: block; width: 100%; max-width: 46px; background: var(--ink); border-radius: 5px 5px 0 0; }
+.chart .col.now i { background: var(--warning); }
+.chart .col b { color: var(--ink); font-size: 11px; }
+
+.amount { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PYNX | ERP Login</title>
+    <link rel="stylesheet" href="login.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../config/supabase.js"></script>
+</head>
+
+<body>
+
+    <main class="login-layout">
+
+        <!-- BRAND PANEL -->
+        <section class="brand-panel">
+
+            <div class="brand-top">
+                <span>PYNX</span>
+                <span>BUSINESS MANAGEMENT SYSTEM</span>
+            </div>
+
+            <div class="logo-container">
+                <img src="assets/images/pynx-logo-transparent.png" alt="PYNX Logo">
+            </div>
+
+            <div class="brand-message">
+                <p class="eyebrow">PYNX ERP SYSTEM</p>
+                <h1>Managing business.<br>Connecting operations.</h1>
+                <p class="brand-description">
+                    A centralized platform for managing business
+                    processes, resources, and daily operations.
+                </p>
+            </div>
+
+            <div class="brand-bottom">
+                <span>EST. PYNX</span>
+                <span>ERP MANAGEMENT SYSTEM</span>
+            </div>
+
+        </section>
+
+        <!-- LOGIN PANEL -->
+        <section class="login-panel">
+
+            <div class="login-content">
+
+                <div class="mobile-logo">
+                    <img src="assets/images/pynx-logo-transparent.png" alt="PYNX Logo">
+                </div>
+
+                <div class="login-heading">
+                    <p class="eyebrow">ACCOUNT ACCESS</p>
+                    <h2>Welcome back.</h2>
+                    <p>Sign in to access your department workspace.</p>
+                </div>
+
+                <form id="loginForm">
+
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <div class="password-label">
+                            <label for="password">Password</label>
+                        </div>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+
+                    <p id="errorMessage" class="error-message"></p>
+
+                    <button type="submit" id="loginButton">
+                        Sign In
+                        <span>→</span>
+                    </button>
+
+                </form>
+
+                <div class="login-note">
+                    <span class="note-line"></span>
+                    <p>AUTHORIZED PERSONNEL ONLY</p>
+                    <span class="note-line"></span>
+                </div>
+
+            </div>
+
+            <footer class="login-footer">
+                <span>© 2026 PYNX</span>
+                <span>ERP MANAGEMENT SYSTEM</span>
+            </footer>
+
+        </section>
+
+    </main>
+
+    <script src="login.js"></script>
+
+</body>
+</html>

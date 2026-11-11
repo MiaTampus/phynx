@@ -1,0 +1,13 @@
+/* ==========================================================================
+   print.css — report printing and receipt printing.
+   ========================================================================== */
+@media print {
+  .sb, .tools, .tabs, .noprint, .toast { display: none !important; }
+  .app { display: block; }
+  main { padding: 0; }
+
+  /* Printing a receipt: show only the open modal's content */
+  body.print-receipt .app { display: none !important; }
+  body.print-receipt .modal { position: static; background: none; padding: 0; display: block; }
+  body.print-receipt .modal .card { max-width: none; max-height: none; overflow: visible; padding: 0; }
+}

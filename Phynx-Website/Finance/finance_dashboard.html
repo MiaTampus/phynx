@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PHYNX ERP – Finance</title>
+  <link rel="stylesheet" href="../Admin/admin_dashboard.css">
+  <link rel="stylesheet" href="./finance_dashboard.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="brand">
+      <img class="logo" src="../logo/pynx-logo.png" alt="Pynx">
+      <div class="brand-tag">FINANCE</div>
+    </div>
+    <div>
+      <div class="nav-label">FINANCE</div>
+      <nav class="nav">
+        <a href="#dashboard"><span class="nav-icon">▦</span>Dashboard</a>
+        <a href="#budget"><span class="nav-icon">◔</span>Budget Monitoring</a>
+        <a href="#expenses"><span class="nav-icon">☰</span>Expense Management</a>
+        <a href="#invoices"><span class="nav-icon">▭</span>Supplier Invoices</a>
+        <a href="#payments"><span class="nav-icon">₱</span>Payments</a>
+        <a href="#transactions"><span class="nav-icon">⇄</span>Financial Transactions</a>
+        <a href="#reports"><span class="nav-icon">≡</span>Financial Reports</a>
+        <a href="#documents"><span class="nav-icon">▤</span>Documents and Receipts</a>
+      </nav>
+    </div>
+    <div class="sidebar-note">
+      Signed in as Finance<br>
+      <a href="../Admin/admin_dashboard.html">Switch to Admin (demo)</a><br>
+      <a href="../Log_in/login.html">Log out</a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="crumb">PHYNX ERP / FINANCE</div>
+      <div class="staff"><span>Finance Officer</span><div class="avatar">F</div></div>
+    </div>
+
+    <!-- ================= DASHBOARD ================= -->
+    <section class="page" id="dashboard">
+      <div class="heading">
+        <div><div class="eyebrow">FINANCE OVERVIEW</div><h1>Dashboard</h1>
+        <p class="subtitle">Budget, expenses, supplier invoices and payments at a glance.</p></div>
+        <a class="button button-dark" href="#invoices">Verify invoices</a>
+      </div>
+      <div class="metrics five">
+        <div class="metric"><div class="metric-top"><span>Total Budget</span></div><div class="metric-value">₱2,400,000</div><div class="metric-foot">FY 2026</div></div>
+        <div class="metric"><div class="metric-top"><span>Total Expenses</span></div><div class="metric-value">₱1,580,000</div><div class="metric-foot">66% of budget</div></div>
+        <div class="metric"><div class="metric-top"><span>Remaining Budget</span></div><div class="metric-value">₱820,000</div><div class="metric-foot">34% left</div></div>
+        <div class="metric"><div class="metric-top"><span>Unpaid Invoices</span></div><div class="metric-value">5</div><div class="metric-foot">₱214,000 outstanding</div></div>
+        <div class="metric"><div class="metric-top"><span>Pending Payments</span></div><div class="metric-value">3</div><div class="metric-foot">₱157,500 due soon</div></div>
+      </div>
+
+      <div class="content-grid">
+        <div class="stack">
+          <div class="panel">
+            <div class="panel-head"><div><h2>Monthly expense overview</h2><div class="panel-sub">Total expenses per month, in thousands of pesos</div></div></div>
+            <div class="chart">
+              <div class="col"><b>212</b><i style="height:62%"></i>Jun</div>
+              <div class="col"><b>248</b><i style="height:72%"></i>Jul</div>
+              <div class="col"><b>301</b><i style="height:88%"></i>Aug</div>
+              <div class="col"><b>264</b><i style="height:77%"></i>Sep</div>
+              <div class="col"><b>343</b><i style="height:100%"></i>Oct</div>
+              <div class="col now"><b>212</b><i style="height:62%"></i>Nov</div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div><h2>Outstanding invoices</h2></div><a class="text-link" href="#invoices">View all</a></div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>INVOICE</th><th>SUPPLIER</th><th>DUE</th><th>AMOUNT</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td class="primary-cell">INV-88190</td><td>Manila Cap Supply</td><td>Nov 8</td><td class="amount">₱92,500</td><td><span class="status rejected">Overdue</span></td></tr>
+                <tr><td class="primary-cell">INV-88231</td><td>House of Fabrics</td><td>Nov 25</td><td class="amount">₱64,000</td><td><span class="status pending">Pending Verification</span></td></tr>
+                <tr><td class="primary-cell">INV-88260</td><td>House of Fabrics</td><td>Dec 2</td><td class="amount">₱21,000</td><td><span class="status">Unpaid</span></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2>Recent financial transactions</h2><a class="text-link" href="#transactions">View all</a></div>
+            <ul class="list">
+              <li><div>Payment to House of Fabrics<small>TXN-2026-0318 · Nov 9</small></div><strong>₱118,000</strong></li>
+              <li><div>J&amp;T delivery fee, Manila caps<small>TXN-2026-0317 · Nov 8</small></div><strong>₱3,450</strong></li>
+              <li><div>Packaging boxes<small>TXN-2026-0315 · Nov 6</small></div><strong>₱24,500</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="stack">
+          <div class="panel">
+            <div class="panel-head"><h2>Budget utilization</h2><a class="text-link" href="#budget">Details</a></div>
+            <div class="panel-body">
+              <div class="bar-row"><div class="bar-label"><span>Logistics</span><span>92%</span></div><div class="bar danger"><span style="width:92%"></span></div></div>
+              <div class="bar-row"><div class="bar-label"><span>Procurement</span><span>78%</span></div><div class="bar warn"><span style="width:78%"></span></div></div>
+              <div class="bar-row"><div class="bar-label"><span>Inventory</span><span>61%</span></div><div class="bar"><span style="width:61%"></span></div></div>
+              <div class="bar-row"><div class="bar-label"><span>Admin</span><span>61%</span></div><div class="bar"><span style="width:61%"></span></div></div>
+              <div class="bar-row"><div class="bar-label"><span>Marketing / Creative</span><span>45%</span></div><div class="bar ok"><span style="width:45%"></span></div></div>
+              <div class="bar-row"><div class="bar-label"><span>Finance</span><span>45%</span></div><div class="bar ok"><span style="width:45%"></span></div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2>Upcoming payments</h2><a class="text-link" href="#payments">View all</a></div>
+            <ul class="list">
+              <li><div>House of Fabrics<small>INV-88231 · due Nov 25</small></div><strong>₱64,000</strong></li>
+              <li><div>Manila Cap Supply<small>INV-88190 · overdue</small></div><strong>₱92,500</strong></li>
+              <li><div>PackRight Co.<small>INV-88255 · due Nov 30</small></div><strong>₱24,500</strong></li>
+            </ul>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2>Notifications</h2></div>
+            <ul class="list">
+              <li><div>INV-88190 is overdue<small>Today</small></div></li>
+              <li><div>Logistics has used 92% of its budget<small>Yesterday</small></div></li>
+              <li><div>PO-2026-042 has no invoice yet<small>Nov 8</small></div></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BUDGET MONITORING ================= -->
+    <section class="page" id="budget">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">FINANCE</div><h1>Budget Monitoring</h1>
+        <p class="subtitle">Track the business budget and how each department is using its allocation. Finance advises on budget; Admin keeps approval of requisitions.</p></div>
+        <div class="actions"><button class="button button-light">Allocation history</button></div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-top"><span>Total Business Budget</span></div><div class="metric-value">₱2.4M</div><div class="metric-foot">FY 2026</div></div>
+        <div class="metric"><div class="metric-top"><span>Budget Used</span></div><div class="metric-value">₱1.58M</div><div class="metric-foot">Across 6 departments</div></div>
+        <div class="metric"><div class="metric-top"><span>Remaining</span></div><div class="metric-value">₱820k</div><div class="metric-foot">34% left</div></div>
+        <div class="metric"><div class="metric-top"><span>Utilization</span></div><div class="metric-value">66%</div><div class="metric-foot">Overall</div></div>
+      </div>
+      <div class="panel">
+        <div class="table-wrap"><table>
+          <thead><tr><th>DEPARTMENT</th><th>ALLOCATED</th><th>USED</th><th>REMAINING</th><th style="width:22%">UTILIZATION</th><th>ACTIONS</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">Admin</td><td class="amount">₱300,000</td><td class="amount">₱183,000</td><td class="amount">₱117,000</td><td><div class="bar"><span style="width:61%"></span></div><div class="secondary-cell">61%</div></td><td><button class="mini">Details</button></td></tr>
+            <tr><td class="primary-cell">Finance</td><td class="amount">₱200,000</td><td class="amount">₱90,000</td><td class="amount">₱110,000</td><td><div class="bar ok"><span style="width:45%"></span></div><div class="secondary-cell">45%</div></td><td><button class="mini">Details</button></td></tr>
+            <tr><td class="primary-cell">Marketing / Creative and Design</td><td class="amount">₱400,000</td><td class="amount">₱180,000</td><td class="amount">₱220,000</td><td><div class="bar ok"><span style="width:45%"></span></div><div class="secondary-cell">45%</div></td><td><button class="mini">Details</button></td></tr>
+            <tr><td class="primary-cell">Procurement</td><td class="amount">₱700,000</td><td class="amount">₱546,000</td><td class="amount">₱154,000</td><td><div class="bar warn"><span style="width:78%"></span></div><div class="secondary-cell">78%</div></td><td><button class="mini">Details</button></td></tr>
+            <tr><td class="primary-cell">Inventory</td><td class="amount">₱500,000</td><td class="amount">₱305,000</td><td class="amount">₱195,000</td><td><div class="bar"><span style="width:61%"></span></div><div class="secondary-cell">61%</div></td><td><button class="mini">Details</button></td></tr>
+            <tr><td class="primary-cell">Logistics</td><td class="amount">₱300,000</td><td class="amount">₱276,000</td><td class="amount">₱24,000</td><td><div class="bar danger"><span style="width:92%"></span></div><div class="secondary-cell">92% · near limit</div></td><td><button class="mini">Details</button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Budget history</h2></div>
+        <ul class="list">
+          <li><div>Logistics allocation increased by ₱50,000<small>Nov 1, 2026 · approved by Admin</small></div></li>
+          <li><div>Q4 allocations set for all departments<small>Oct 1, 2026</small></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= EXPENSE MANAGEMENT ================= -->
+    <section class="page" id="expenses">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">FINANCE</div><h1>Expense Management</h1>
+        <p class="subtitle">Record and monitor business expenses by category and department.</p></div>
+        <div class="actions"><button class="button button-dark">Add expense</button></div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-top"><span>This Month</span></div><div class="metric-value">₱212k</div><div class="metric-foot">November 2026</div></div>
+        <div class="metric"><div class="metric-top"><span>Materials and Supplies</span></div><div class="metric-value">₱128k</div><div class="metric-foot">Largest category</div></div>
+        <div class="metric"><div class="metric-top"><span>Transportation and Delivery</span></div><div class="metric-value">₱31k</div><div class="metric-foot">Incl. J&amp;T fees</div></div>
+        <div class="metric"><div class="metric-top"><span>Unpaid Expenses</span></div><div class="metric-value">4</div><div class="metric-foot">Awaiting payment</div></div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="search" placeholder="Search reference or description"><select><option>All categories</option><option>Materials and Supplies</option><option>Transportation</option><option>Delivery Fees</option><option>Packaging</option><option>Supplier Expenses</option><option>Operational Expenses</option></select><select><option>All departments</option></select><select><option>All payment statuses</option><option>Paid</option><option>Unpaid</option></select></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>REFERENCE</th><th>CATEGORY</th><th>DESCRIPTION</th><th>DEPARTMENT</th><th>DATE</th><th>AMOUNT</th><th>PAYMENT</th><th>ACTIONS</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">EXP-2026-212</td><td>Delivery Fees</td><td>J&amp;T, Manila cap delivery</td><td>Logistics</td><td>Nov 8</td><td class="amount">₱3,450</td><td><span class="status approved">Paid</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini">Edit</button><button class="mini reject">Delete</button></div></td></tr>
+            <tr><td class="primary-cell">EXP-2026-210</td><td>Packaging</td><td>Packaging boxes, 300 pcs</td><td>Logistics</td><td>Nov 6</td><td class="amount">₱24,500</td><td><span class="status pending">Unpaid</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini">Edit</button><button class="mini reject">Delete</button></div></td></tr>
+            <tr><td class="primary-cell">EXP-2026-207</td><td>Materials and Supplies</td><td>Cotton twill, 200 m (PO-2026-041)</td><td>Procurement</td><td>Nov 5</td><td class="amount">₱64,000</td><td><span class="status pending">Unpaid</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini">Edit</button><button class="mini reject">Delete</button></div></td></tr>
+            <tr><td class="primary-cell">EXP-2026-203</td><td>Operational Expenses</td><td>Office supplies</td><td>Admin</td><td>Nov 3</td><td class="amount">₱4,800</td><td><span class="status approved">Paid</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini">Edit</button><button class="mini reject">Delete</button></div></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ================= SUPPLIER INVOICES ================= -->
+    <section class="page" id="invoices">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">FINANCE</div><h1>Supplier Invoices</h1>
+        <p class="subtitle">Check invoices against purchase orders and deliveries before payment. An approved PO is not proof of payment.</p></div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-top"><span>Unpaid</span></div><div class="metric-value">2</div><div class="metric-foot">Not yet due</div></div>
+        <div class="metric"><div class="metric-top"><span>Pending Verification</span></div><div class="metric-value">1</div><div class="metric-foot">Check against PO and GRN</div></div>
+        <div class="metric"><div class="metric-top"><span>Overdue</span></div><div class="metric-value">1</div><div class="metric-foot">₱92,500</div></div>
+        <div class="metric"><div class="metric-top"><span>Paid</span></div><div class="metric-value">18</div><div class="metric-foot">This year</div></div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="search" placeholder="Search invoice, supplier or PO"><select><option>All suppliers</option><option>House of Fabrics</option><option>Manila Cap Supply</option><option>PackRight Co.</option></select><select><option>All statuses</option><option>Unpaid</option><option>Pending Verification</option><option>Partially Paid</option><option>Paid</option><option>Overdue</option></select></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>INVOICE</th><th>SUPPLIER</th><th>PO</th><th>INVOICE DATE</th><th>DUE</th><th>TOTAL</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">INV-88231</td><td>House of Fabrics</td><td>PO-2026-041</td><td>Nov 8</td><td>Nov 25</td><td class="amount">₱64,000</td><td><span class="status pending">Pending Verification</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini approve">Verify</button></div></td></tr>
+            <tr><td class="primary-cell">INV-88190</td><td>Manila Cap Supply</td><td>PO-2026-040</td><td>Oct 24</td><td>Nov 8</td><td class="amount">₱92,500</td><td><span class="status rejected">Overdue</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini">Pay</button></div></td></tr>
+            <tr><td class="primary-cell">INV-88260</td><td>House of Fabrics</td><td>PO-2026-042</td><td>Nov 9</td><td>Dec 2</td><td class="amount">₱21,000</td><td><span class="status">Unpaid</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini">Pay</button></div></td></tr>
+            <tr><td class="primary-cell">INV-88249</td><td>PackRight Co.</td><td>PO-2026-039</td><td>Nov 2</td><td>Nov 30</td><td class="amount">₱30,000</td><td><span class="status partial">Partially Paid</span></td><td><div class="row-actions"><button class="mini">View</button><button class="mini">Pay</button></div></td></tr>
+            <tr><td class="primary-cell">INV-88144</td><td>House of Fabrics</td><td>PO-2026-038</td><td>Oct 30</td><td>Nov 12</td><td class="amount">₱118,000</td><td><span class="status approved">Paid</span></td><td><div class="row-actions"><button class="mini">View</button></div></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ================= PAYMENTS ================= -->
+    <section class="page" id="payments">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">FINANCE</div><h1>Payments</h1>
+        <p class="subtitle">Record and follow supplier payments. No real banking connection; entries are for tracking only.</p></div>
+        <div class="actions"><button class="button button-dark">Record payment</button></div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-top"><span>Paid This Month</span></div><div class="metric-value">₱130k</div><div class="metric-foot">3 payments</div></div>
+        <div class="metric"><div class="metric-top"><span>Pending Payments</span></div><div class="metric-value">3</div><div class="metric-foot">₱157,500</div></div>
+        <div class="metric"><div class="metric-top"><span>Outstanding Balance</span></div><div class="metric-value">₱214k</div><div class="metric-foot">All suppliers</div></div>
+        <div class="metric"><div class="metric-top"><span>Overdue</span></div><div class="metric-value">1</div><div class="metric-foot">Needs attention</div></div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="search" placeholder="Search payment reference or supplier"><select><option>All methods</option><option>Bank transfer</option><option>Cash</option><option>Check</option></select><select><option>All statuses</option><option>Pending</option><option>Completed</option><option>Partial</option></select></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>PAYMENT REF</th><th>SUPPLIER</th><th>INVOICE</th><th>DATE</th><th>AMOUNT</th><th>METHOD</th><th>BALANCE</th><th>STATUS</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">PAY-2026-118</td><td>House of Fabrics</td><td>INV-88144</td><td>Nov 9</td><td class="amount">₱118,000</td><td>Bank transfer</td><td class="amount">₱0</td><td><span class="status approved">Completed</span></td></tr>
+            <tr><td class="primary-cell">PAY-2026-117</td><td>PackRight Co.</td><td>INV-88249</td><td>Nov 6</td><td class="amount">₱18,000</td><td>Bank transfer</td><td class="amount">₱12,000</td><td><span class="status partial">Partial</span></td></tr>
+            <tr><td class="primary-cell">PAY-2026-119</td><td>Manila Cap Supply</td><td>INV-88190</td><td>Scheduled Nov 11</td><td class="amount">₱92,500</td><td>Check</td><td class="amount">₱92,500</td><td><span class="status pending">Pending</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="note">Payment history for each supplier will appear in the details view.</div>
+      </div>
+    </section>
+
+    <!-- ================= FINANCIAL TRANSACTIONS ================= -->
+    <section class="page" id="transactions">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">FINANCE</div><h1>Financial Transactions</h1>
+        <p class="subtitle">One list of all payments, expenses and budget movements. Search, filter and sort to find a record.</p></div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="search" placeholder="Search reference, description or supplier"><select><option>All types</option><option>Payment</option><option>Expense</option><option>Budget allocation</option></select><select><option>All departments</option></select><select><option>All statuses</option><option>Completed</option><option>Pending</option></select><select><option>Sort: newest first</option><option>Sort: highest amount</option></select></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>REFERENCE</th><th>TYPE</th><th>DESCRIPTION</th><th>DEPARTMENT</th><th>SUPPLIER</th><th>DATE</th><th>AMOUNT</th><th>STATUS</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">TXN-2026-0318</td><td>Payment</td><td>Cotton and swim fabric</td><td>Procurement</td><td>House of Fabrics</td><td>Nov 9</td><td class="amount">₱118,000</td><td><span class="status approved">Completed</span></td></tr>
+            <tr><td class="primary-cell">TXN-2026-0317</td><td>Expense</td><td>Delivery fee, Manila caps</td><td>Logistics</td><td>J&amp;T</td><td>Nov 8</td><td class="amount">₱3,450</td><td><span class="status approved">Completed</span></td></tr>
+            <tr><td class="primary-cell">TXN-2026-0315</td><td>Expense</td><td>Packaging boxes</td><td>Logistics</td><td>PackRight Co.</td><td>Nov 6</td><td class="amount">₱24,500</td><td><span class="status pending">Pending</span></td></tr>
+            <tr><td class="primary-cell">TXN-2026-0310</td><td>Budget allocation</td><td>Logistics increase</td><td>Logistics</td><td>–</td><td>Nov 1</td><td class="amount">₱50,000</td><td><span class="status approved">Completed</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ================= FINANCIAL REPORTS ================= -->
+    <section class="page" id="reports">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">FINANCE</div><h1>Financial Reports</h1>
+        <p class="subtitle">Pick a report, set the date range and department, preview it, then export or print.</p></div>
+        <div class="actions"><button class="button button-light">Print</button><button class="button button-dark">Export CSV</button></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Report type</h2></div>
+        <div class="doc-cats">
+          <div>Monthly Expense Report<span>Expenses per month</span></div>
+          <div>Department Budget Report<span>Allocation and use per department</span></div>
+          <div>Supplier Payment Report<span>Payments by supplier</span></div>
+          <div>Outstanding Invoice Report<span>Unpaid and overdue invoices</span></div>
+          <div>Budget Utilization Report<span>Percent of budget used</span></div>
+          <div>Financial Summary Report<span>Overall position</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="date" aria-label="From date"><input type="date" aria-label="To date"><select><option>All departments</option></select><button class="button button-dark">Generate preview</button></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>MONTH</th><th>MATERIALS</th><th>TRANSPORT AND DELIVERY</th><th>PACKAGING</th><th>OPERATIONAL</th><th>TOTAL</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">October 2026</td><td class="amount">₱221,000</td><td class="amount">₱48,000</td><td class="amount">₱41,500</td><td class="amount">₱32,500</td><td class="amount primary-cell">₱343,000</td></tr>
+            <tr><td class="primary-cell">November 2026</td><td class="amount">₱128,000</td><td class="amount">₱31,000</td><td class="amount">₱24,500</td><td class="amount">₱28,500</td><td class="amount primary-cell">₱212,000</td></tr>
+          </tbody>
+        </table></div>
+        <div class="note">Sample preview of the Monthly Expense Report.</div>
+      </div>
+    </section>
+
+    <!-- ================= DOCUMENTS AND RECEIPTS ================= -->
+    <section class="page" id="documents">
+      <a class="back" href="#dashboard">← Back to dashboard</a>
+      <div class="heading">
+        <div><div class="eyebrow">FINANCE</div><h1>Documents and Receipts</h1>
+        <p class="subtitle">Keep financial records together: invoices, receipts, payment confirmations and vouchers.</p></div>
+        <div class="actions"><button class="button button-dark">Upload document</button></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Categories</h2></div>
+        <div class="doc-cats">
+          <div>Supplier invoices<span>29 records</span></div><div>Official receipts<span>24 records</span></div>
+          <div>Payment confirmations<span>21 records</span></div><div>Expense receipts<span>37 records</span></div>
+          <div>Purchase order references<span>36 records</span></div><div>Payment vouchers<span>18 records</span></div>
+          <div>Supporting documents<span>12 records</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="toolbar"><input type="search" placeholder="Search reference number"><select><option>All categories</option></select><select><option>All statuses</option><option>Filed</option><option>For review</option></select></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>REFERENCE</th><th>CATEGORY</th><th>RELATED TO</th><th>DATE</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
+          <tbody>
+            <tr><td class="primary-cell">OR-2026-0912</td><td>Official receipt</td><td>PAY-2026-118</td><td>Nov 9</td><td><span class="status approved">Filed</span></td><td><button class="mini">View</button></td></tr>
+            <tr><td class="primary-cell">INV-88231</td><td>Supplier invoice</td><td>PO-2026-041</td><td>Nov 8</td><td><span class="status pending">For review</span></td><td><button class="mini">View</button></td></tr>
+            <tr><td class="primary-cell">PV-2026-044</td><td>Payment voucher</td><td>PAY-2026-119</td><td>Nov 7</td><td><span class="status pending">For review</span></td><td><button class="mini">View</button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>
